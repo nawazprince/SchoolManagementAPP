@@ -1,0 +1,122 @@
+<h1 id="tableLabel">Section Index</h1>
+
+
+
+<p *ngIf="!StudentSectionInfoList"><em class="text-info">Loading...</em></p>
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#sectionModal" class="btn btn-success">
+    Add New
+  </button>
+</div>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="StudentSectionInfoList">
+  <thead>
+    <tr>
+      <th>Section Id</th>
+      <th>Section Name</th>
+      <th>Class</th>
+      
+     
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let e of StudentSectionInfoList">
+      <td>{{ e.sectionId }}</td>
+      <td>{{ e.sectionName }}</td>
+      <td>{{e.className}}</td>
+      
+    
+
+
+      <td class="btn-group">
+        <button class="btn btn-primary" (click)="GetStudentSectionInfo(e.sectionId)">Edit</button>
+        <button class="btn btn-danger" (click)="DeleteConfirmation(e)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="sectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" #form="ngForm" (ngSubmit)="form.form.valid && SubmitStudentSectionInfo(form)" autocomplete="off" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sectionModalLabel">New Section</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="sectionId" #sectionId="ngModel" [(ngModel)]="StudentSectionInfo.sectionId" />
+
+        <div class="form-group">
+          <label>Section Name</label>
+          <input type="text" class=" form-control" name="sectionName"
+                 #sectionName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  sectionName.invalid }" required [(ngModel)]="StudentSectionInfo.sectionName" />
+        </div>
+
+
+        <div class="form-group">
+          <label>Class Name</label>
+          <select class=" form-control" name="classId" #classId="ngModel" [ngClass]="{'is-invalid':form.submitted && classId.invalid }"
+                  [(ngModel)]="StudentSectionInfo.classId">
+
+            <option value="undefined">
+              Please select Value
+            </option>
+            <option *ngFor="let class of ClassList" [ngValue]="class.classId">
+              {{class.className}}
+            </option>
+          </select>
+          <span class="text-danger" *ngIf="StudentSectionInfo.classError">{{StudentSectionInfo.classError }}</span>
+
+        </div>
+        <!--<div class="form-group">
+          <label>Shift Name</label>
+          <select class=" form-control" name="id" #id="ngModel" [ngClass]="{'is-invalid':form.submitted && id.invalid }"
+                  [(ngModel)]="StudentSectionInfo.id">
+
+            <option value="undefined">
+              Please select Value
+            </option>
+            <option *ngFor="let class of StudentShiftInfoList" [ngValue]="StudentShiftInfo.id">
+              {{StudentShiftInfo.shiftname}}
+            </option>
+          </select>
+          <span class="text-danger" *ngIf="StudentSectionInfo.classError">{{StudentSectionInfo.classError }}</span>
+
+        </div>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="Cancel()">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{StudentSectionInfo.sectionId}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteStudentSectionInfo(StudentSectionInfo.sectionId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

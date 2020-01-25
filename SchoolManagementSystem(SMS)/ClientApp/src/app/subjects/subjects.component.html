@@ -1,0 +1,170 @@
+<h1 id="tableLabel">Subject Index</h1>
+
+
+
+<p *ngIf="!SubjectList"><em class="text-info">Loading...</em></p>
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#SubjectModal" class="btn btn-success">
+    Add New
+  </button>
+</div>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="SubjectList">
+  <thead>
+    <tr>
+      <th>Subject Id</th>
+      <th>Subject Code</th>
+      <th>Subject Name</th>
+      <th>Class</th>
+      <th>Group </th>
+
+      <th>MCQ Marks</th>
+      <th>Written Marks</th>
+      <th>Pratical Marks</th>
+      <th>CT Marks</th>
+      <th>Total Marks</th>
+      <th>Pass Marks</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let e of SubjectList">
+      <td>{{ e.subjectId }}</td>
+      <td>{{e.subjectCode }}</td>
+      <td>{{e.subjectName }}</td>
+      <td>{{ e.className }}</td>
+      <td>{{ e.groupName }}</td>
+
+      <td>{{e.mcqMarks }}</td>
+      <td>{{e.writtenMarks }}</td>
+      <td>{{e.practicalMarks }}</td>
+      <td>{{e.ctMarks }}</td>
+      <td>{{e.totalMarks }}</td>
+      <td>{{e.passMarks }}</td>
+
+
+      <td class="btn-group">
+        <button class="btn btn-primary" (click)="GetSubject(e.subjectId)">Edit</button>
+        <button class="btn btn-danger" (click)="DeleteConfirmation(e)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="SubjectModal" tabindex="-1" role="dialog" aria-labelledby="SubjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" #form="ngForm" (ngSubmit)="form.form.valid && SubmitSubject(form)" autocomplete="off" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="SubjectModalLabel">New Subject</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="subjectId" #subjectId="ngModel" [(ngModel)]="Subject.subjectId" />
+
+        <div class="form-group">
+          <label>Subject Name</label>
+          <input type="text" class=" form-control" name="subjectName"
+                 #subjectName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  subjectName.invalid }" required [(ngModel)]="Subject.subjectName" />
+        </div>
+        <div class="form-group">
+          <label>Subject Code</label>
+          <input type="text" class=" form-control" name="subjectCode"
+                 #subjectCode="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  subjectCode.invalid }" required [(ngModel)]="Subject.subjectCode" />
+        </div>
+
+        <div class="form-group">
+          <label>Class Name</label>
+          <select class=" form-control" name="classId" #classId="ngModel" [ngClass]="{'is-invalid':form.submitted && classId.invalid }"
+                  [(ngModel)]="Subject.classId">
+
+            <option value="undefined">
+              Please select Value
+            </option>
+            <option *ngFor="let class of ClassList" [ngValue]="class.classId">
+              {{class.className}}
+            </option>
+          </select>
+          <span class="text-danger" *ngIf="Subject.classError">{{Subject.classError }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>Group Name</label>
+          <select class=" form-control" name="groupId" #groupId="ngModel" [ngClass]="{'is-invalid':form.submitted && groupId.invalid }"
+                  [(ngModel)]="Subject.groupId">
+
+            <option value="undefined">
+              Please select Value
+            </option>
+            <option *ngFor="let Group of GroupList" [ngValue]="Group.groupId">
+              {{Group.groupName}}
+            </option>
+          </select>
+          <span class="text-danger" *ngIf="Subject.classError">{{Subject.classError }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>MCQ Marks</label>
+          <input type="number" class=" form-control" name="mcqMarks"
+                 #mcqMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  mcqMarks.invalid }" required [(ngModel)]="Subject.mcqMarks" />
+        </div>
+        <div class="form-group">
+          <label>Written Marks</label>
+          <input type="number" class=" form-control" name="writtenMarks"
+                 #writtenMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  writtenMarks.invalid }" required [(ngModel)]="Subject.writtenMarks" />
+        </div>
+        <div class="form-group">
+          <label>Practical Marks</label>
+          <input type="number" class=" form-control" name="practicalMarks"
+                 #practicalMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  practicalMarks.invalid }" required [(ngModel)]="Subject.practicalMarks" />
+        </div>
+        <div class="form-group">
+          <label>CT Marks</label>
+          <input type="number" class=" form-control" name="ctMarks"
+                 #ctMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  ctMarks.invalid }" required [(ngModel)]="Subject.ctMarks" />
+        </div>
+        <div class="form-group">
+          <label>Total Marks</label>
+          <input type="number" class=" form-control" value="{{Subject.writtenMarks + Subject.mcqMarks + Subject.practicalMarks + Subject.ctMarks}}" readonly />
+        </div>
+        <div class="form-group">
+          <label>Pass Marks</label>
+          <input type="number" class=" form-control" name="passMarks"
+                 #passMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  passMarks.invalid }" required [(ngModel)]="Subject.passMarks" />
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="Cancel()">Close</button>
+        <button type="submit" class="btn btn-primary" >Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{Subject.subjectId}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteSubject(Subject.subjectId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

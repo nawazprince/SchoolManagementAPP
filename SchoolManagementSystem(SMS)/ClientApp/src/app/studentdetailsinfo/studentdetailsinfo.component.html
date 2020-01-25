@@ -1,0 +1,196 @@
+<h1 id="tableLabel">StudentDetailsInfo Index</h1>
+
+
+
+<p *ngIf="!StudentDetailsInfoList"><em>Loading...</em></p>
+
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#studentDetailsInfoModal" class="btn btn-success">
+    Create New
+  </button>
+</div>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="StudentDetailsInfoList">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>StudentId</th>
+      <th>Shift</th>
+      <th>Class</th>
+      <th>Section</th>
+      <th>Group</th>
+      <th>RollNo</th>
+
+      <th>AdmissionDate</th>
+
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let s of StudentDetailsInfoList">
+      <td>{{ s.studentDetailsId }}</td>
+      <td>{{ s.studentId }}</td>
+      <td>{{ s.shiftName }}</td>
+      <td>{{ s.className }}</td>
+      <td>{{ s.sectionName }}</td>
+      <td>{{ s.groupName }}</td>
+
+
+      <td>{{ s.rollNo }}</td>
+
+      <td>{{ s.admissionDate }}</td>
+
+
+      <td class="btn-group">
+        <button class="btn btn-primary" (click)="GetStudentDetailsInfo(s.studentDetailsId)">Edit</button>
+        <button class="btn btn-danger" (click)="DeleteConfirmation(s)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<div class="modal fade" id="studentDetailsInfoModal" tabindex="-1" role="dialog" aria-labelledby="studentDetailsInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" #form="ngForm" (ngSubmit)="form.form.valid && SubmitStudentDetailsInfo(form)" autocomplete="off" enctype="multipart/form-data">
+      <fieldset>
+        <legend class="modal-header">
+          <span class="modal-title h5" id="studentDetailsInfoModalLabel">New Student Details Info</span>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </legend>
+        <div class="modal-body">
+          <input type="hidden" name="studentDetailsId" #studentDetailsId="ngModel" [(ngModel)]="StudentDetailsInfo.studentDetailsId" />
+
+          <mat-form-field class="mat-form-md">
+            <mat-label>Student</mat-label>
+            <mat-select name="studentId" #studentId="ngModel" [ngClass]="{'is-invalid':form.submitted && studentId.invalid }"
+                        [(ngModel)]="StudentDetailsInfo.studentId">
+              <mat-option>Please select Value</mat-option>
+              <mat-option *ngFor="let student of AdmissionList" [value]="student.studentId">
+                {{student.studentId}} : {{student.studentName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+
+
+          <div class="form-group">
+            <label>Shift</label>
+            <select class=" form-control" name="shiftId" #shiftId="ngModel" [ngClass]="{'is-invalid':form.submitted && shiftId.invalid }"
+                    [(ngModel)]="StudentDetailsInfo.shiftId">
+
+              <option value="undefined">
+                Please select Value
+              </option>
+              <option *ngFor="let shift of StudentShiftInfoList" [ngValue]="shift.shiftId">
+                {{shift.shiftName}}
+              </option>
+            </select>
+            <span class="text-danger" *ngIf="StudentDetailsInfo.classError">{{StudentDetailsInfo.classError }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Class</label>
+            <select class=" form-control" name="classId" #classId="ngModel" [ngClass]="{'is-invalid':form.submitted && classId.invalid }"
+                    [(ngModel)]="StudentDetailsInfo.classId">
+
+              <option value="undefined">
+                Please select Value
+              </option>
+              <option *ngFor="let class of ClassList" [ngValue]="class.classId">
+                {{class.className}}
+              </option>
+            </select>
+            <span class="text-danger" *ngIf="StudentDetailsInfo.classError">{{StudentDetailsInfo.classError }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Section</label>
+            <select class=" form-control" name="sectionId" #sectionId="ngModel" [ngClass]="{'is-invalid':form.submitted && sectionId.invalid }"
+                    [(ngModel)]="StudentDetailsInfo.sectionId">
+
+              <option value="undefined">
+                Please select Value
+              </option>
+              <option *ngFor="let section of StudentSectionInfoList" [ngValue]="section.sectionId">
+                {{section.sectionName}}
+              </option>
+            </select>
+            <span class="text-danger" *ngIf="StudentDetailsInfo.classError">{{StudentDetailsInfo.classError }}</span>
+          </div>
+
+
+          <div class="form-group">
+            <label>Roll No</label>
+            <input type="number" class=" form-control" name="rollNo"
+                   #rollNo="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  rollNo.invalid }" required [(ngModel)]="StudentDetailsInfo.rollNo" />
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label>Group</label>
+            <select class=" form-control" name="groupId" #groupId="ngModel" [ngClass]="{'is-invalid':form.submitted && groupId.invalid }"
+                    [(ngModel)]="StudentDetailsInfo.groupId">
+
+              <option value="undefined">
+                Please select Value
+              </option>
+              <option *ngFor="let group of GroupList" [ngValue]="group.groupId">
+                {{group.groupName}}
+              </option>
+            </select>
+            <span class="text-danger" *ngIf="StudentDetailsInfo.classError">{{StudentDetailsInfo.classError }}</span>
+          </div>
+
+
+          <div class="form-group">
+            <label>Admission Date</label>
+            <input type="date" class=" form-control" name="admissionDate"
+                   #admissionDate="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  admissionDate.invalid }" required [(ngModel)]="StudentDetailsInfo.admissionDate" />
+          </div>
+
+
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="SubmitStudentDetailsInfo()">Save</button>
+        </div>
+      </fieldset>
+    
+  </form>
+  </div>
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="studentDetailsInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="studentDetailsInfoModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{StudentDetailsInfo.studentDetailsId}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteStudentDetailsInfo(StudentDetailsInfo.studentDetailsId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

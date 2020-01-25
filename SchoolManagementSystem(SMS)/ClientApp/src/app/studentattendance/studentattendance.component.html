@@ -1,0 +1,96 @@
+<h1 id="tableLabel">StudentAttendance Index</h1>
+
+
+
+<p *ngIf="!StudentAttendanceList"><em>Loading...</em></p>
+
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadData()">
+    Refresh
+  </button>
+</div>
+<form #form="ngForm" (ngSubmit)="form.form.valid && SubmitAttendace(form)" autocomplete="off">
+  <div class="card">
+    <div class="card-header">
+      <div class="col-3 form-group">
+        <label>Shift : </label>
+        <select class=" form-control" name="classId" #classId="ngModel" [ngClass]="{'is-invalid':form.submitted && classId.invalid }"
+                [(ngModel)]="Subject.classId">
+
+          <option value="0">All</option>
+          <option *ngFor="let sft of ShiftList" [ngValue]="sft.Id">{{sft.ShiftName}}</option>
+        </select>
+      </div>
+      <div class="col-3 form-group">
+        <label>Class : </label>
+        <select class="form-control" [(ngModel)]="Class" (change)="ChangeClass()">
+          <option value="0">All</option>
+          <option *ngFor="let c of ClassList" [ngValue]="c.classId">{{c.className}}</option>
+        </select>
+      </div>
+      <div class="col-3 form-group">
+        <label>Section : </label>
+        <select class="form-control" [(ngModel)]="Section" (change)="LoadStudentList()">
+          <option value="0">All</option>
+          <option *ngFor="let sc of SectionList" [ngValue]="sc.sectionId">{{sc.sectionName}}</option>
+        </select>
+      </div>
+      <div class="col-3 form-group">
+        <label>Date : </label>
+        <input type="date" class=" form-control" [(ngModel)]="AttendanceDate" required  />
+    
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="StudentAttendanceList">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>StudentId</th>
+        <th>Name</th>
+        <th>Shift</th>
+        <th>Class</th>
+        <th>Section</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of StudentAttendanceList">
+        <!--<td>
+          <input type="hidden" [(ngModel)]="s.AttendanceId" name="AttendanceId" #AttendanceId="ngModel" />
+          <input type="hidden" [(ngModel)]="s.AttendanceDate" name="AttendanceDate" #AttendanceDate="ngModel" />
+          <input type="checkbox" class=" form-control" [(ngModel)]="s.IsPresent" name="IsPresent"
+                 #IsPresent="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  IsPresent.invalid }" required />
+        </td>
+        <td>
+          <input type="number" class=" form-control" [(ngModel)]="s.StudentId" name="StudentId"
+                 #StudentId="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  StudentId.invalid }" required readonly />
+        </td>
+        <td>
+          <input type="text" class=" form-control" [(ngModel)]="s.StudentName" name="StudentName"
+                 #StudentName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  StudentName.invalid }" required readonly />
+        </td>
+        <td>
+          <input type="text" class=" form-control" [(ngModel)]="s.Shift" name="Shift"
+                 #Shift="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  Shift.invalid }" required readonly />
+        </td>
+        <td>
+          <input type="text" class=" form-control" [(ngModel)]="s.Class" name="Class"
+                 #Class="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  Class.invalid }" required readonly />
+        </td>
+        <td>
+          <input type="text" class=" form-control" [(ngModel)]="s.Section" name="Section"
+                 #Section="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  Section.invalid }" required readonly />
+        </td>-->
+
+      </tr>
+    </tbody>
+  </table>
+
+</form>

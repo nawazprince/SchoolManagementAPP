@@ -1,0 +1,164 @@
+<h1 id="tableLabel">Result Index</h1>
+
+
+
+<p *ngIf="!ResultList"><em class="text-info">Loading...</em></p>
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#resultModal" class="btn btn-success">
+    Add New
+  </button>
+</div>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="ResultList">
+  <thead>
+    <tr>
+      <th>ExamId</th>
+      <th>Student</th>
+      <th>MCQ Marks</th>
+      <th>Written Marks</th>
+      <th>Pratical Marks</th>
+      <th>CT Marks</th>
+      <th>Grade</th>
+      <th>Result Input Date</th>
+   
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let r of ResultList">
+      
+      <td>{{ r.examId }}</td>
+      <td>{{ r.studentId }}</td>
+      <td>{{r.mcqMarks }}</td>
+      <td>{{r.writtenMarks }}</td>
+      <td>{{r.pratical }}</td>
+      <td>{{r.ctMarks }}</td>
+      <td>{{r.grade }}</td>
+      <td>{{r.resultDate }}</td>
+     
+      
+
+      <td class="btn-group">
+        <button class="btn btn-primary" (click)="GetResult(r.resultId)">Edit</button>
+        <button class="btn btn-danger" (click)="DeleteConfirmation(r)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" #form="ngForm" (ngSubmit)="form.form.valid && SubmitResult(form)" autocomplete="off" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resultModalLabel">New Result</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="resultId" #resultId="ngModel" [(ngModel)]="Result.resultId" />
+
+        <div class="form-group">
+          <label>Exam</label>
+          <select class=" form-control" name="examId" #examId="ngModel" [ngClass]="{'is-invalid':form.submitted && examId.invalid }"
+                  [(ngModel)]="Result.examId">
+
+            <option value="undefined">
+              Please select Value
+            </option>
+            <option *ngFor="let exam of ExamList" [ngValue]="exam.examId">
+              {{exam.examId}}
+            </option>
+          </select>
+          <span class="text-danger" *ngIf="Result.classError">{{Result.classError }}</span>
+        </div>
+
+
+
+        <div class="form-group">
+          <label>Student</label>
+          <select class=" form-control" name="studentId" #studentId="ngModel" [ngClass]="{'is-invalid':form.submitted && studentId.invalid }"
+                  [(ngModel)]="Result.studentId">
+            <option value="undefined">
+              Please select Value
+            </option>
+            <option *ngFor="let student of StudentDetailsInfoList" [ngValue]="student.studentId">
+              {{student.rollNo}}
+            </option>
+          </select>
+          <span class="text-danger" *ngIf="Result.classError">{{Result.classError }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>MCQ Marks</label>
+          <input type="number" class=" form-control" name="mcqMarks"
+                 #mcqMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  mcqMarks.invalid }" required [(ngModel)]="Result.mcqMarks" />
+        </div>
+        <div class="form-group">
+          <label>Written Marks</label>
+          <input type="number" class=" form-control" name="writtenMarks"
+                 #writtenMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  writtenMarks.invalid }" required [(ngModel)]="Result.writtenMarks" />
+        </div>
+        <div class="form-group">
+          <label>Practical Marks</label>
+          <input type="number" class=" form-control" name="practical"
+                 #practical="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  practical.invalid }" required [(ngModel)]="Result.practical" />
+        </div>
+        <div class="form-group">
+          <label>CT Marks</label>
+          <input type="number" class=" form-control" name="ctMarks"
+                 #ctMarks="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  ctMarks.invalid }" required [(ngModel)]="Result.ctMarks" />
+        </div>
+
+        <div class="form-group">
+          <label>Grade</label>
+          <input type="text" class=" form-control" name="grade"
+                 #grade="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  grade.invalid }" required [(ngModel)]="Result.grade" />
+        </div>
+        <div class="form-group">
+          <label>Result Input Date</label>
+          <input type="date" class=" form-control" name="resultDate"
+                 #resultDate="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  resultDate.invalid }" required [(ngModel)]="Result.resultDate" />
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="Cancel()">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  
+
+
+
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{Result.resultId}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteResult(Result.resultId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

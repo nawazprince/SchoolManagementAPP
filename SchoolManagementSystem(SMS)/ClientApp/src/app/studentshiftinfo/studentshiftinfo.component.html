@@ -1,0 +1,88 @@
+<h1 id="tableLabel">StudentShiftInfo Index</h1>
+
+
+
+<p *ngIf="!StudentShiftInfoList"><em class="text-info">Loading...</em></p>
+
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#studentShiftInfoModal" class="btn btn-success">
+    Create New
+  </button>
+</div>
+
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="StudentShiftInfoList">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>ShiftName</th>
+      <th>Action</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let s of StudentShiftInfoList">
+      <td>{{ s.shiftId }}</td>
+      <td>{{ s.shiftName }}</td>
+     
+      <td class="btn-group">
+        <button class="btn btn-primary" (click)="GetStudentShiftInfo(s.shiftId)">Edit</button>
+        <button class="btn btn-danger" (click)="DeleteConfirmation(s)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="studentShiftInfoModal" tabindex="-1" role="dialog" aria-labelledby="studentShiftInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="studentShiftInfoModalLabel">New StudentShiftInfo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden"  name="shiftId" #shiftId="ngModel" [(ngModel)]="StudentShiftInfo.shiftId" />
+
+        <div class="form-group">
+          <label>Shift Name</label>
+          <input type="text" name="shiftName" #shiftName="ngModel" class=" form-control" [(ngModel)]="StudentShiftInfo.shiftName" />
+        </div>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="SubmitStudentShiftInfo()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="studentShiftInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="studentShiftInfoModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{StudentShiftInfo.shiftName}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteStudentShiftInfo(StudentShiftInfo.shiftId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

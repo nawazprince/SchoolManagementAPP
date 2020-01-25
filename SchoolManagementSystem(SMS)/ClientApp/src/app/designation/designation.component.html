@@ -1,0 +1,94 @@
+<h1 id="tableLabel">Designation Index</h1>
+
+
+
+<p *ngIf="!DesignationList"><em class="text-info">Loading...</em></p>
+
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#designationModal" class="btn btn-success">
+    Create New
+  </button>
+
+</div>
+
+  <table class="table table-striped table-bordered dt-responsive nowrap" aria-labelledby="tableLabel" *ngIf="DesignationList">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>DesignationName</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of DesignationList ">
+        <td>{{ d.designationId }}</td>
+        <td>{{ d.designationName }}</td>
+        <td class="btn-group">
+          <button class="btn btn-primary" (click)="GetDesignation(d.designationId)">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          </button>
+          <button class="btn btn-danger" (click)="DeleteConfirmation(d)">
+            <i class="fa fa-trash" ></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="DesignationList.Count == 0">
+        <th colspan="4" class="text-center text-warning">No data available</th>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-labelledby="designationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" #form="ngForm" (ngSubmit)="form.form.valid && SubmitDesignation(form)" autocomplete="off" >
+      <div class="modal-header">
+        <h5 class="modal-title" id="designationModalLabel">New Designation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" [(ngModel)]="Designation.designationId" name="designationId" #designationId="ngModel" />
+
+        <div class="form-group">
+          <label>Designation Name</label>
+          <input type="text" class=" form-control" [(ngModel)]="Designation.designationName" name="designationName"
+                 #designationName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  designationName.invalid }" required />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="Cancel(form)">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="designationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="designationModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{Designation.designationName}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteDesignation(Designation.designationId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+

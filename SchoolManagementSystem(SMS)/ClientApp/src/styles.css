@@ -1,0 +1,55 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+
+.mat-form-md {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+.modal-backdrop{
+  display:none;
+}
+.mat-form-field {
+  width: 100%;
+}
+
+.text-middle{
+  vertical-align:middle;
+}
+
+
+.page-loader{
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,93 @@
+<h1 id="tableLabel">Exam Year Index</h1>
+
+
+
+<p *ngIf="!ExamYearList"><em class="text-info">Loading...</em></p>
+
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#ExamYearModal" class="btn btn-success">
+    Create New
+  </button>
+
+</div>
+
+<div id="print-section">
+
+
+  <table class="table table-striped table-bordered dt-responsive nowrap" aria-labelledby="tableLabel" *ngIf="ExamYearList">
+    <thead>
+      <tr>
+        <th>Exam Year Id</th>
+        <th>Exam Year Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let g of ExamYearList ">
+        <td>{{ g.examYearId }}</td>
+        <td>{{ g.examYearDate }}</td>
+        <td class="btn-group">
+          <button class="btn btn-primary" (click)="GetExamYear(g.examYearId)">Edit</button>
+          <button class="btn btn-danger" (click)="DeleteConfirmation(g)">Delete</button>
+        </td>
+      </tr>
+      <tr *ngIf="ExamYearList.Count == 0">
+        <th colspan="4" class="text-center text-warning">No data available</th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="ExamYearModal" tabindex="-1" role="dialog" aria-labelledby="ExamYearModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" #form="ngForm" (ngSubmit)="form.form.valid && SubmitExamYear(form)" autocomplete="off" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ExamYearModalLabel">New Exam Year</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden"  [(ngModel)]="ExamYear.examYearId" name="examYearId" #id="ngModel" />
+
+        <div class="form-group">
+          <label>Exam Year Date</label>
+          <input type="number" min="2000" max="2022" class=" form-control" [(ngModel)]="ExamYear.examYearDate" name="examYearDate"
+                 #examYearDate="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  examYearDate.invalid }" required />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="Cancel(form)">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="ExamYearModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ExamYearModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{ExamYear.examYearDate}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteExamYear(ExamYear.examYearId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+

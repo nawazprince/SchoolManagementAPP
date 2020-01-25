@@ -1,0 +1,230 @@
+<h1 id="tableLabel">StudentInfo Index</h1>
+
+
+
+<p *ngIf="!StudentInfoList"><em class="text-info">Loading...</em></p>
+
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click)="LoadList()">
+    Refresh
+  </button>
+
+  <button type="button" data-toggle="modal" data-target="#studentInfoModal" class="btn btn-success">
+    Create New
+  </button>
+</div>
+
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="StudentInfoList">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>StudentName</th>
+      <th>FatherName</th>
+      <th>MotherName</th>
+      <th>DateOfBirth</th>
+      <th>Gender</th>
+      <th>BloodGroup</th>
+      <th>Nationality</th>
+      <th>BirthCertificateNumber</th>
+      <th>Relegion</th>
+      
+      <th>PresentAddress</th>
+
+      <th>PermanentAddress</th>
+
+      <th>GurdianName</th>
+
+      <th>Cell</th>
+      <th>Image</th>
+
+
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let s of StudentInfoList">
+      <td>{{ s.studentId }}</td>
+      <td>{{ s.studentName }}</td>
+      <td>{{ s.fatherName }}</td>
+      <td>{{ s.motherName }}</td>
+      <td>{{ s.dob }}</td>
+      <td>{{ s.gender }}</td>
+      <td>{{ s.bloodGroupText }}</td>
+      <td>{{ s.nationality }}</td>
+      <td>{{ s.brithcertificateNumber }}</td>
+      <td>{{ s.relegion }}</td>
+      
+   
+      <td>{{ s.presentAddress }}</td>
+
+      <td>{{ s.permanentAddress }}</td>
+
+      <td>{{ s.gurdianName }}</td>
+
+      <td>{{ s.cell }}</td>
+      <td class="img-thumbnail mb-3 ">
+        <img [src]="s.ImagePath" alt="{{s.ImagePath}}" width="200" height="150" class="text-center" style="margin: 0  auto" />
+      </td>
+
+      <td class="btn-group">
+        <button class="btn btn-primary" (click)="GetStudentInfo(s.studentId)">Edit</button>
+        <button class="btn btn-danger" (click)="DeleteConfirmation(s)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+ <!--Modal-->
+<div class="modal fade" id="studentInfoModal" tabindex="-1" role="dialog" aria-labelledby="studentInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <form class="modal-content" #form="ngForm" (ngSubmit)="form.form.valid && SubmitStudentInfo(form)" autocomplete="off" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="studentInfoModalLabel">New StudentInfo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <input type="hidden" name="studentId" #studentId="ngModel" [(ngModel)]="StudentInfo.studentId" />
+        <div class="form-group">
+          <label>Student Name</label>
+          <input type="text" class=" form-control" name="studentName"
+                 #studentName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  studentName.invalid }" required [(ngModel)]="StudentInfo.studentName" />
+        </div>
+
+        <div class="row">
+          <div class="form-group col-6">
+            <label>Father's Name</label>
+            <input type="text" class=" form-control" name="fatherName"
+                   #fatherName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  fatherName.invalid }" required [(ngModel)]="StudentInfo.fatherName" />
+          </div>
+          <div class="form-group  col-6">
+            <label>Mother's Name</label>
+            <input type="text" class=" form-control" name="motherName"
+                   #motherName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  motherName.invalid }" required [(ngModel)]="StudentInfo.motherName" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Date Of Birth</label>
+          <input type="date" class=" form-control" name="dob"
+                 #dob="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  dob.invalid }" required [(ngModel)]="StudentInfo.dob" />
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <input type="radio" class="" [(ngModel)]="StudentInfo.gender" name="gender"
+                 #gender="ngModel" [ngClass]="{ 'is-invalid': form.submitted && gender.invalid }" required value="Male" />Male
+          <input type="radio" class=" " [(ngModel)]="StudentInfo.gender" name="gender"
+                 #gender="ngModel" [ngClass]="{ 'is-invalid': form.submitted && gender.invalid }" required value="Female" />Female
+
+          <div class="text-danger" name="gender" *ngIf="form.submitted && gender.invalid ">Select Gender</div>
+
+        </div>
+        <div class="form-group">
+          <label>Blood Group</label>
+          <select class=" form-control" name="studentId" #studentId="ngModel" [ngClass]="{'is-invalid':form.submitted && studentId.invalid }"
+                  [(ngModel)]="StudentInfo.bloodGroup">
+
+            <option value="undefined">
+              Please select Value
+            </option>
+            <option *ngFor="let bls of BloodGroupList" [ngValue]="bls">
+              {{bls}}
+            </option>
+          </select>
+          <span class="text-danger" *ngIf="StudentInfo.classError">{{StudentInfo.classError }}</span>
+        </div>
+        <div class="form-group">
+          <label>Nationality</label>
+          <input type="text" class=" form-control" name="nationality"
+                 #nationality="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  nationality.invalid }" required [(ngModel)]="StudentInfo.nationality" />
+        </div>
+        <div class="form-group">
+          <label>Birth Certificate Number</label>
+          <input type="number" class=" form-control" name="brithcertificateNumber"
+                 #brithcertificateNumber="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  brithcertificateNumber.invalid }" required [(ngModel)]="StudentInfo.brithcertificateNumber" />
+        </div>
+        <div class="form-group">
+          <label>Relegion</label>
+          <input type="text" class=" form-control" name="relegion"
+                 #relegion="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  relegion.invalid }" required [(ngModel)]="StudentInfo.relegion" />
+        </div>
+        <!--<div class="form-group">
+          <label>Disability</label>
+          <input type="checkbox" class=" form-control" [(ngModel)]="StudentInfo.disability" />
+        </div>-->
+        <!--<div class="form-group">
+          <label>Admission Date</label>
+          <input type="date" class=" form-control" name="admissionDate"
+                 #admissionDate="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  admissionDate.invalid }" required [(ngModel)]="StudentInfo.admissionDate" />
+        </div>-->
+        <div class="form-group">
+          <label>Present Address</label>
+          <input type="text" class=" form-control" name="presentAddress"
+                 #presentAddress="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  presentAddress.invalid }" required [(ngModel)]="StudentInfo.presentAddress" />
+
+        </div>
+
+        <div class="form-group">
+          <label>Permanent Address</label>
+          <input type="text" class=" form-control" name="permanentAddress"
+                 #permanentAddress="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  permanentAddress.invalid }" required [(ngModel)]="StudentInfo.permanentAddress" />
+        </div>
+
+        <div class="form-group">
+          <label>Gurdian Name</label>
+          <input type="text" class=" form-control" name="gurdianName"
+                 #gurdianName="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  gurdianName.invalid }" required [(ngModel)]="StudentInfo.gurdianName" />
+        </div>
+
+        <div class="form-group">
+          <label>Gurdian Contact Number</label>
+          <input type="number" class=" form-control" name="cell"
+                 #cell="ngModel" [ngClass]="{ 'is-invalid': form.submitted &&  cell.invalid }" required [(ngModel)]="StudentInfo.cell" />
+        </div>
+        <div class="form-group">
+          <figure>
+            <div class="img-thumbnail mb-3 " *ngIf="photoPreview">
+              <img [src]="photoPreview" width="300" class="text-center" style="margin: 0  auto" />
+            </div>
+            <figcaption>
+              <label>Photo</label>
+              <input type="file" class=" form-control" [(ngModel)]="StudentInfo.Image" name="Image"
+                     #Image="ngModel" (change)="onFileChanged($event)" />
+            </figcaption>
+          </figure>
+
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="SubmitStudentInfo()">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="studentInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="studentInfoModalLabel">Confirm delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span class="h2 text-warning">Delete {{StudentInfo.studentId}}?</span>
+      </div>
+      <div class="modal-footer btn-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" (click)="DeleteStudentInfo(StudentInfo.studentId)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<body>
+  <!--<app-nav-menu></app-nav-menu>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>-->
+
+
+  <app-nav-menu></app-nav-menu>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" class="bg-dark text-light shadow-lg" [(opened)]="opened">User Panel
+      <mat-nav-list [routerLinkActive]="['link-active']">
+        <a mat-list-item class="text-light" [routerLink]="['/result']">Result</a>
+        <a mat-list-item class="text-light" [routerLink]="['/exam']">Exam</a>
+        <a mat-list-item class="text-light" [routerLink]="['/employee']">Employee</a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content >
+      <button mat-raised-button color="accent" (click)="sidenav.toggle()">MENU</button>
+
+      <section  class="m-4 shadow-lg p-3 mb-5 bg-white rounded" >
+        <router-outlet>
+         
+        </router-outlet>
+      </section>
+      
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+</body>
